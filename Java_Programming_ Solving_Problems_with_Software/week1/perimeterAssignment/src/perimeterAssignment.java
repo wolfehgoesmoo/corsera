@@ -89,6 +89,23 @@ public class perimeterAssignment {
         return longestLength;
     }
 
+    public double getLargestX(Shape s) {
+        double largestX = 0.0;
+
+        // Loop over all points
+        for (Point currPt : s.getPoints()) {
+
+            // Compare current largestX to currentX
+            if (currPt.getX() > largestX) {
+                
+                // If it is greater, replace the current
+                largestX = currPt.getX();
+            }
+        }
+
+        // Return the largest
+        return largestX;
+    }
     public static void main (String[] args) {
         // Create a new perimeterAssignment object
         perimeterAssignment pr = new perimeterAssignment();
