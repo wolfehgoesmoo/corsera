@@ -1,14 +1,14 @@
 package perimeterAssignment.src;
 
 public class Part2 {
-    public String findSimpleGene(String dna) {
+    public String findSimpleGene(String dna, String startCodon, String stopCodon) {
         String gene = null;
         int startCodonIndex = 0;
         int endCodonIndex = 0;
 
         // Find the first and last instances of the start/end codons
-        startCodonIndex = dna.indexOf("ATG");
-        endCodonIndex = dna.indexOf("TAA", startCodonIndex);
+        startCodonIndex = dna.indexOf(startCodon);
+        endCodonIndex = dna.indexOf(stopCodon, startCodonIndex);
 
         // Error Check: if either index is negative, then return error
         if (startCodonIndex < 0 || endCodonIndex < 0) {
@@ -45,18 +45,23 @@ public class Part2 {
         // Print the DNA string in pairs with the search result
         // No ATG
         System.out.println("Gene: " + testCase1);
-        System.out.println("Result: " + findSimpleGene(testCase1));
+        System.out.println("Result: " + findSimpleGene(testCase1, "ATG", "TAA"));
         // No TAA
         System.out.println("Gene: " + testCase2);
-        System.out.println("Result: " + findSimpleGene(testCase2));
+        System.out.println("Result: " + findSimpleGene(testCase2, "ATG", "TAA"));
         // No ATG or TAA
         System.out.println("Gene: " + testCase3);
-        System.out.println("Result: " + findSimpleGene(testCase3));
+        System.out.println("Result: " + findSimpleGene(testCase3, "ATG", "TAA"));
         // ATG and TAA but not multiple of 3
         System.out.println("Gene: " + testCase4);
-        System.out.println("Result: " + findSimpleGene(testCase4));
+        System.out.println("Result: " + findSimpleGene(testCase4, "ATG", "TAA"));
         // Proper ATG and TAA and multiple of 3
         System.out.println("Gene: " + testCase5);
-        System.out.println("Result: " + findSimpleGene(testCase5));
+        System.out.println("Result: " + findSimpleGene(testCase5, "ATG", "TAA"));
+    }
+
+    public static void main(String[] args) throws Exception {
+        Part2 p = new Part2();
+        p.testSimpleGene();
     }
 }
