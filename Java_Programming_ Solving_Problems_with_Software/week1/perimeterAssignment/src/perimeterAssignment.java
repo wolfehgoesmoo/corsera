@@ -63,6 +63,29 @@ public class perimeterAssignment {
         return getPerimeter(s) / getNumPoints(s);
     }
 
+    public double getLargestSide(Shape s) {
+        double longestLength = 0.0;
+        Point prevPt = s.getLastPoint();
+
+        // Loop through each point in the shape
+        for (Point currPt : s.getPoints()) {
+
+            // Get the distance (length) between last point and current point
+            double currDist = prevPt.distance(currPt);
+
+            // Compare to stored longestLength to current length
+            if (currDist > longestLength) {
+                // If the current length is greater, replace the longestLength value
+                longestLength = currDist;
+            }
+
+            // Update the last point with the current point
+            prevPt = currPt;
+        }
+        // Return the longestLength
+        return longestLength;
+    }
+
     public static void main (String[] args) {
         // Create a new perimeterAssignment object
         perimeterAssignment pr = new perimeterAssignment();
