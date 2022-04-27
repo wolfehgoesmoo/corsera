@@ -151,6 +151,39 @@ public class perimeterAssignment {
         // Display it to the user
         System.out.println("Largest Perimeter Of Files: = " + largestPerimeter);
     }
+
+    public String getFileWithLargestPerimeter() {
+        double largestPerimeter = 0.0;
+        double length = 0.0;
+        File fileWithLargestPerimeter = null;
+
+        // Select multiple files
+        DirectoryResource dr = new DirectoryResource();
+
+        // Loop through all files in the directory
+        for (File f : dr.selectedFiles()) {
+
+            // Open the current file
+            FileResource fr = new FileResource(f);
+
+            // Create a new shape based on the current file
+            Shape s = new Shape(fr);
+
+            // Calculate the perimeter for current shape
+            length = getPerimeter(s);
+
+            // If it's the largest perimeter
+            if (length > largestPerimeter) {
+
+                // Update both the stored longest perimeter to the current perimeter, 
+                // and update the file name to the new perimeter's source file name
+                largestPerimeter = length;
+                fileWithLargestPerimeter = f;
+            }
+        }
+        // Return the file name of the largest perimeter
+        return fileWithLargestPerimeter.getName();
+    }
     public static void main (String[] args) {
         // Create a new perimeterAssignment object
         perimeterAssignment pr = new perimeterAssignment();
