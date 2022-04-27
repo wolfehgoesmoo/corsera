@@ -8,14 +8,19 @@ public class perimeterAssignment {
     public double getPerimeter (Shape s) {
         // Start with totalPerim = 0
         double totalPerim = 0.0;
+
         // Start wth prevPt = the last point 
         Point prevPt = s.getLastPoint();
+
         // For each point currPt in the shape,
         for (Point currPt : s.getPoints()) {
+
             // Find distance from prevPt point to currPt 
             double currDist = prevPt.distance(currPt);
+
             // Update totalPerim by currDist
             totalPerim = totalPerim + currDist;
+
             // Update prevPt to be currPt
             prevPt = currPt;
         }
@@ -30,11 +35,13 @@ public class perimeterAssignment {
         // Load in the shape data to create a new shape object
         Shape s = new Shape(fr);
 
-        // Find the loaded shapes perimeter
+        // Get the shapes perimeter and it's number of points
         double length = getPerimeter(s);
+        int totalPoints = getNumPoints(s);
 
-        // Output the perimeter to the user
-        System.out.println("perimeter = " + length);
+        // Output the perimeter and number of points to the user
+        System.out.println("Shape Perimeter: " + length);
+        System.out.println("Shape Total Points: " + totalPoints);
     }
 
     public int getNumPoints(Shape s) {
