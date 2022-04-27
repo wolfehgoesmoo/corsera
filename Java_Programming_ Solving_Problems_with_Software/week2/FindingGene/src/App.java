@@ -10,16 +10,21 @@ public class App {
         startCodonIndex = dnaStrand.indexOf("ATG");
         endCodonIndex = dnaStrand.indexOf("TAA", startCodonIndex);
 
+        // Error Check: if either index is negative, then return an empty string
+        if (startCodonIndex < 0 || endCodonIndex < 0) {
+            return "";
+        }
+
         // Return the gene. The +3 offset is to account for the length of the end codon
         return dnaStrand.substring(startCodonIndex, endCodonIndex + 3);
     }
     
     public static void main(String[] args) throws Exception {
-        String dnaStrand = "TACGATATGACTACGTTAGCATAACTAGATCGCT";
+        String dnaStrand = "TACGATATGACTACGTTAGCATATACTAGATCGCT";
         String gene = null;
         App app = new App();
         gene = app.getGeneFromDNA(dnaStrand);
-        System.out.println(gene);
+        System.out.println("Gene: " + gene);
     }
 }
 
