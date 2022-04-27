@@ -1,6 +1,6 @@
 package FindingGene.src;
 
-public class App {
+public class GeneFinder {
     
     public String getGeneFromDNA(String dnaStrand) {
         String gene = null;
@@ -21,18 +21,18 @@ public class App {
 
         // Error Check: If the gene is not made up of codons, then return error
         if (gene.length() % 3 != 0) {
-            return "invalid dnaStrand";
+            return "invalid gene";
+        } else {
+            // Return the gene
+            return gene;
         }
-
-        // Return the gene
-        return gene;
     }
     
     public static void main(String[] args) throws Exception {
-        String dnaStrand = "TACGATATGACTACGTTVAGCATAATACTAGATCGCT";
+        String dnaStrand = "TACGATATGACTACGTTAGCATAATACTAGATCGCT";
         String gene = null;
-        App app = new App();
-        gene = app.getGeneFromDNA(dnaStrand);
+        GeneFinder gf = new GeneFinder();
+        gene = gf.getGeneFromDNA(dnaStrand);
         System.out.println("Gene: " + gene);
         System.out.println("Length: " + gene.length());
     }
