@@ -184,6 +184,15 @@ public class perimeterAssignment {
         // Return the file name of the largest perimeter
         return fileWithLargestPerimeter.getName();
     }
+
+    public void testFileWithLargestPerimeter() {
+        // Get the file name of the file with the largest perimeter
+        String file = getFileWithLargestPerimeter();
+
+        // Display it to the user
+        System.out.println("Largest perimeter file is: " + file);
+    }
+
     public static void main (String[] args) {
         // Create a new perimeterAssignment object
         perimeterAssignment pr = new perimeterAssignment();
