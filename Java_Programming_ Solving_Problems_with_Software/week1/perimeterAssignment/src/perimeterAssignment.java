@@ -1,4 +1,7 @@
 package perimeterAssignment.src;
+import java.io.File;
+
+import edu.duke.DirectoryResource;
 import edu.duke.FileResource;
 import edu.duke.Point;
 import edu.duke.Shape;
@@ -109,6 +112,36 @@ public class perimeterAssignment {
 
         // Return the largest
         return largestX;
+    }
+    
+    public double getLargestPerimeterMultipleFiles() {
+        double largestPerimeter = 0.0;
+        double length = 0.0;
+
+        // Select multiple files
+        DirectoryResource dr = new DirectoryResource();
+
+        // Loop through each file in the directory
+        for (File f : dr.selectedFiles()) {
+
+            // Open the current file
+            FileResource fr = new FileResource(f);
+
+            // Create a new shape based on the current file
+            Shape s = new Shape(fr);
+
+            // Calculate the perimeter of the shape
+            length = getPerimeter(s);
+
+            // If the current perimeter is larger than the stored
+            if (length > largestPerimeter) {
+
+                // Update the stored perimeter to be the current
+                largestPerimeter = length;
+            }
+        }
+        // Return the largest perimeter
+        return largestPerimeter;
     }
     public static void main (String[] args) {
         // Create a new perimeterAssignment object
