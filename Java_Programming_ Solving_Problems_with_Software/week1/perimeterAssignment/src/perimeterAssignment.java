@@ -56,6 +56,11 @@ public class perimeterAssignment {
         return totalPoints;
     }
 
+    public double getAverageLength(Shape s) {
+        // Return the total perimeter divided by its number of points
+        return getPerimeter(s) / getNumPoints(s);
+    }
+
     public static void main (String[] args) {
         // Create a new perimeterAssignment object
         perimeterAssignment pr = new perimeterAssignment();
