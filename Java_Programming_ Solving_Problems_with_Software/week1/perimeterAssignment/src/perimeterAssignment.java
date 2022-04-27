@@ -37,6 +37,18 @@ public class perimeterAssignment {
         System.out.println("perimeter = " + length);
     }
 
+    public int getNumPoints(Shape s) {
+        int totalPoints = 0;
+
+        // Loop through each point in the shape
+        for (Point currentPoint : s.getPoints()) {
+            // Increment based on the current point
+            totalPoints++;
+        }
+        // Return the number of points
+        return totalPoints;
+    }
+
     public static void main (String[] args) {
         // Create a new perimeterAssignment object
         perimeterAssignment pr = new perimeterAssignment();
