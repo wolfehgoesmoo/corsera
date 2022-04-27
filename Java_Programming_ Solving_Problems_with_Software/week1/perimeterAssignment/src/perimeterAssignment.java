@@ -143,6 +143,14 @@ public class perimeterAssignment {
         // Return the largest perimeter
         return largestPerimeter;
     }
+
+    public void testPerimeterMultipleFiles() {
+        // Get the largestPerimeter of all files
+        double largestPerimeter = getLargestPerimeterMultipleFiles();
+
+        // Display it to the user
+        System.out.println("Largest Perimeter Of Files: = " + largestPerimeter);
+    }
     public static void main (String[] args) {
         // Create a new perimeterAssignment object
         perimeterAssignment pr = new perimeterAssignment();
