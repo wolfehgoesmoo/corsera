@@ -3,6 +3,7 @@ package FindingGene.src;
 public class App {
     
     public String getGeneFromDNA(String dnaStrand) {
+        String gene = null;
         int startCodonIndex = 0;
         int endCodonIndex = 0;
 
@@ -10,21 +11,30 @@ public class App {
         startCodonIndex = dnaStrand.indexOf("ATG");
         endCodonIndex = dnaStrand.indexOf("TAA", startCodonIndex);
 
-        // Error Check: if either index is negative, then return an empty string
+        // Error Check: if either index is negative, then return error
         if (startCodonIndex < 0 || endCodonIndex < 0) {
-            return "";
+            return "invalid start/end cod";
         }
 
-        // Return the gene. The +3 offset is to account for the length of the end codon
-        return dnaStrand.substring(startCodonIndex, endCodonIndex + 3);
+        // Get the gene. The +3 offset is to account for the length of the end codon
+        gene = dnaStrand.substring(startCodonIndex, endCodonIndex + 3);
+
+        // Error Check: If the gene is not made up of codons, then return error
+        if (gene.length() % 3 != 0) {
+            return "invalid dnaStrand";
+        }
+
+        // Return the gene
+        return gene;
     }
     
     public static void main(String[] args) throws Exception {
-        String dnaStrand = "TACGATATGACTACGTTAGCATATACTAGATCGCT";
+        String dnaStrand = "TACGATATGACTACGTTVAGCATAATACTAGATCGCT";
         String gene = null;
         App app = new App();
         gene = app.getGeneFromDNA(dnaStrand);
         System.out.println("Gene: " + gene);
+        System.out.println("Length: " + gene.length());
     }
 }
 
