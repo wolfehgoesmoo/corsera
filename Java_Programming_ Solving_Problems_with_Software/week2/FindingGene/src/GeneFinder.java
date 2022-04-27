@@ -1,4 +1,13 @@
 package FindingGene.src;
+/*
+
+Nucleotide: Single character in string represented by A, T, C, G
+Codon: Three character string
+Start Codon: Three character represented by ATG
+End Codon: Three character represented by TAA
+Gene: Everything between Start and End Codon, including both codons
+
+*/
 
 public class GeneFinder {
     
@@ -39,13 +48,3 @@ public class GeneFinder {
 }
 
 
-/*
-
-Nucleotide: Single character in string represented by A, T, C, G
-Codon: Three character string
-Start Codon: Three character represented by ATG
-End Codon: Three character represented by TAA
-Gene: Everything between Start and End Codon, including both codons
-
-
-*/
