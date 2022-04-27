@@ -35,15 +35,18 @@ public class perimeterAssignment {
         // Load in the shape data to create a new shape object
         Shape s = new Shape(fr);
 
-        // Get the shapes perimeter, it's number of points, and it's average length
+        // Get the shapes perimeter, it's number of points, 
+        // it's average length, and the longest length of any given side
         double length = getPerimeter(s);
         int totalPoints = getNumPoints(s);
         double averageLength = getAverageLength(s);
+        double longestLength = getLargestSide(s);
 
         // Output the perimeter, number of points, and average length to the user
         System.out.println("Shape Perimeter: " + length);
         System.out.println("Shape Total Points: " + totalPoints);
         System.out.println("Average Length: " + averageLength);
+        System.out.println("Longest Length: " + longestLength);
     }
 
     public int getNumPoints(Shape s) {
