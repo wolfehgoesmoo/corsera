@@ -1,3 +1,5 @@
+package course_project_files.tagFinder1;
+
 /**
  * Finds a protein within a strand of DNA represented as a string of c,g,t,a letters.
  * A protein is a part of the DNA strand marked by start and stop codons (DNA triples)
