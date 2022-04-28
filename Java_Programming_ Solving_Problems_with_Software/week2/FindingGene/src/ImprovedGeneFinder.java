@@ -4,8 +4,12 @@ public class ImprovedGeneFinder {
     boolean DEBUG = false;
 
     public static void main(String[] args) throws Exception {
+        // Print a couple of blank lines to separate from running blah
+        System.out.println("");
+        System.out.println("");
+
         ImprovedGeneFinder gf = new ImprovedGeneFinder();
-        gf.testAdvancedGene();
+        gf.testGetMultipleGenesInDNAStrand();
     }
 
     public String[] findAdvancedGenes(String dna) {
@@ -13,29 +17,45 @@ public class ImprovedGeneFinder {
         int stopCodonIndex = 0;
         int currentStartIndex = 0;
         String currentGene = null;
-        String[] genes = new String[0];
+        String[] genes = new String[1];
+        boolean firstGene = true;
 
         // Loop through the dna strand for each occurrence of the start codon "ATG" until
         // we've gone through the entire strand and there are no more starting codon sequences.
-        while (startCodonIndex != -1) {
+        while (true) {
             
             // Find the start codon
             startCodonIndex = findStartCodon(dna, currentStartIndex, "ATG");
-            System.out.println("Start codon: " + startCodonIndex);
+            if (DEBUG) { System.out.println("Start codon: " + startCodonIndex); }
 
-            // Get the end codon
+            // If there is no start codon, exit loop
+            if (startCodonIndex == -1) { break; }
+
+            // Get the stop codon
             stopCodonIndex = getStopCodon(dna, startCodonIndex);
-            System.out.println("Stop codon: " + stopCodonIndex);
+            if (DEBUG) { System.out.println("Stop codon: " + stopCodonIndex); }
 
-            // Capture the gene from current start/end codons (+3 is for codon length offset)
+            // If there is no stop codon, exit loop
+            if (stopCodonIndex == -1) { break; }
+
+            // Capture the gene from current start/stop codons (+3 is for codon length offset)
             currentGene = dna.substring(startCodonIndex, stopCodonIndex + 3);
-            System.out.println("Gene: " + currentGene);
+            if (DEBUG) { System.out.println("Gene: " + currentGene); }
             
-            // FIXME:
-            startCodonIndex = -1;
+            // If it's the first discovered gene, set it as the first element of the array
+            if (firstGene) {
+                genes[0] = currentGene;
+                firstGene = false;
+            } else {
+                // Otherwise, add it to the end of the array
+                genes = appendStringToArray(currentGene, genes);
+            }
+
+            // Set the next index to be after the end of the first discovered gene
+            currentStartIndex = (stopCodonIndex + 3);
+            if (DEBUG) { System.out.println("New starting index: " + currentStartIndex); }
         }
-
-
+        // Return the genes array
         return genes;
     }
 
@@ -191,11 +211,6 @@ public class ImprovedGeneFinder {
         resultSet[6] = "ATGTACTATAATCATAAGTAA";
         resultSet[7] = "ATGGACTGA";
 
-
-        // Print a couple of blank lines to separate from running blah
-        System.out.println("");
-        System.out.println("");
-
         // Loop through all test cases
         for (int i = 0; i < testCase.length; i++) {
             
@@ -220,17 +235,31 @@ public class ImprovedGeneFinder {
     }
 
     public void testGetMultipleGenesInDNAStrand() {
-        // Strand
-        String[] dnaStrand = new String[0];
-        dnaStrand[0] = "xxxATGxxxTAAxxxATGyyyTAGxxx";
+        // Starting Strand
+        String[] dnaStrand = new String[1];
+        dnaStrand[0] = "xxxATGxxxTAAxxxATGyyyTAGxxtaazATGvvvxtgabbhhhTGAuuu";
 
-        // Genes
-        String[] resultSet = new String[1];
+        // Result Genes
+        String[] resultSet = new String[3];
         resultSet[0] = "ATGxxxTAA";
         resultSet[1] = "ATGyyyTAG";
+        resultSet[2] = "ATGvvvxtgabbhhhTGA";
 
-        // Test
-        findAdvancedGenes(dnaStrand[0]);
+        // Return all captured genes
+        String[] resultGenes = findAdvancedGenes(dnaStrand[0]);
+        // System.out.println("Genes found in DNA Strand: " + dnaStrand[0]);
+        // printArray(resultGenes);
+
+        // Compare captured results vs expected results
+        for (int i = 0; i < resultGenes.length; i++) {
+            if (resultGenes[i].equals(resultSet[i])) {
+                // Pass
+            } else {
+                // Fail
+                System.out.println("Failed on genes: " + resultGenes[i]);
+            }
+        }
+        System.out.println("All tests complete");
     }
 
     // Helper methods
@@ -255,11 +284,17 @@ public class ImprovedGeneFinder {
         }
 
         // Add the new element to the array
-        newArray[newArraySize] = stringToAdd;
+        newArray[newArraySize - 1] = stringToAdd;
 
         // Return the new array
         return newArray;
     }
+
+    public void printArray(String[] stringArray) {
+        for (int i = 0; i < stringArray.length; i++) {
+            System.out.println(stringArray[i]);
+        }
+    }
+
+
 }
-
-
