@@ -8,6 +8,54 @@ public class ImprovedGeneFinder {
         gf.testAdvancedGene();
     }
 
+    public String[] findAdvancedGenes(String dna) {
+        int startCodonIndex = 0;
+        int stopCodonIndex = 0;
+        int currentStartIndex = 0;
+        String currentGene = null;
+        String[] genes = new String[0];
+
+        // Loop through the dna strand for each occurrence of the start codon "ATG" until
+        // we've gone through the entire strand and there are no more starting codon sequences.
+        while (startCodonIndex != -1) {
+            
+            // Find the start codon
+            startCodonIndex = findStartCodon(dna, currentStartIndex, "ATG");
+            System.out.println("Start codon: " + startCodonIndex);
+
+            // Get the end codon
+            stopCodonIndex = getStopCodon(dna, startCodonIndex);
+            System.out.println("Stop codon: " + stopCodonIndex);
+
+            // Capture the gene from current start/end codons (+3 is for codon length offset)
+            currentGene = dna.substring(startCodonIndex, stopCodonIndex + 3);
+            System.out.println("Gene: " + currentGene);
+            
+            // FIXME:
+            startCodonIndex = -1;
+        }
+
+
+        return genes;
+    }
+
+    public int findStartCodon(String dna, int startCodonIndex, String startCodon) {
+
+        // Search for the next start codon
+        startCodonIndex = dna.indexOf(startCodon, startCodonIndex);
+        if (DEBUG) { System.out.println("Current start codon index: " + startCodonIndex); }
+
+        // If there isn't a start codon, then return -1, otherwise return the current start codon index
+        if (startCodonIndex < 0) { 
+            if (DEBUG) { System.out.println("No start codon found"); }
+            return -1;
+        } else {
+            if (DEBUG) { System.out.println("Used start codon index: " + startCodonIndex); }
+            return startCodonIndex;
+        }
+
+    }
+
     public String findAdvancedGene(String dna) {
         String gene = null;
         String startCodon = "ATG";
@@ -120,6 +168,7 @@ public class ImprovedGeneFinder {
         }
     }
 
+    // Testing methods
     public void testAdvancedGene() {
         String currentGene = null;
         String[] testCase = new String[8];
@@ -170,12 +219,18 @@ public class ImprovedGeneFinder {
         System.out.println("");
     }
 
-    public void testMultipleGenesInSingleDNAStrand() {
+    public void testGetMultipleGenesInDNAStrand() {
+        // Strand
         String[] dnaStrand = new String[0];
         dnaStrand[0] = "xxxATGxxxTAAxxxATGyyyTAGxxx";
+
+        // Genes
         String[] resultSet = new String[1];
         resultSet[0] = "ATGxxxTAA";
         resultSet[1] = "ATGyyyTAG";
+
+        // Test
+        findAdvancedGenes(dnaStrand[0]);
     }
 
     // Helper methods
@@ -185,6 +240,25 @@ public class ImprovedGeneFinder {
         } else {
             return false;
         }
+    }
+
+    public String[] appendStringToArray(String stringToAdd, String[] originalArray) {
+        int originalArraySize = originalArray.length;
+        int newArraySize = originalArraySize + 1;
+
+        // Create a new array with one additional element
+        String[] newArray = new String[newArraySize];
+
+        // Loop over the original array to populate the new array with original values
+        for (int i = 0; i < originalArraySize; i++) {
+            newArray[i] = originalArray[i];
+        }
+
+        // Add the new element to the array
+        newArray[newArraySize] = stringToAdd;
+
+        // Return the new array
+        return newArray;
     }
 }
 
