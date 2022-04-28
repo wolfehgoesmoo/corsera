@@ -16,7 +16,7 @@ public class Part2 {
             caseState = "upper";
         }
 
-        // For all input to upper case
+        // Convert all input to upper case
         dna = dna.toUpperCase();
         startCodon = startCodon.toUpperCase();
         stopCodon = stopCodon.toUpperCase();

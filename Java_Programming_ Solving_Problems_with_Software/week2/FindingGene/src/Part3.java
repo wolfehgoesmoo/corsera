@@ -15,7 +15,7 @@ public class Part3 {
             // If there is a match
             // Search for the second occurrence of stringa in stringb
             // Search beyond the first match
-            match = stringb.indexOf(stringa, match + stringa.length());
+            match = stringb.indexOf(stringa, match + 1);
 
             // If there's no match, return false
             if (match == -1) { 
@@ -70,7 +70,7 @@ public class Part3 {
             return stringb;
         } else {
             // return the end of stringa in stringb until the end of stringb
-            return stringb.substring(match + stringa.length(), stringb.length());
+            return stringb.substring(match + stringa.length());
         }
     }
     
@@ -90,7 +90,7 @@ public class Part3 {
     
     public static void main(String[] args) {
         Part3 p = new Part3();
-        //p.testingTwoOccurences();
-        p.testingLastPart();
+        p.testingTwoOccurences();
+        //p.testingLastPart();
     }
 }
