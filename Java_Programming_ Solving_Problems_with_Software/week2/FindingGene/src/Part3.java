@@ -58,8 +58,24 @@ public class Part3 {
             System.out.println("True");
         }
     }
+
+    public String lastPart(String stringa, String stringb) {
+        int match = -1;
+
+        // Search for a first occurrence of stringa in stringb
+        match = stringb.indexOf(stringa);
+
+        // If there is no match, return stringb
+        if (match == -1) { 
+            return stringb;
+        } else {
+            // return the end of stringa in stringb until the end of stringb
+            return stringb.substring(match + stringa.length(), stringb.length());
+        }
+    }
     public static void main(String[] args) {
         Part3 p = new Part3();
-        p.testing();
+        //p.testing();
+        System.out.println(p.lastPart("zoo", "forest"));
     }
 }
