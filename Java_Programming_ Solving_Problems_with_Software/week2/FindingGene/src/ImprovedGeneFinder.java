@@ -123,69 +123,52 @@ public class ImprovedGeneFinder {
     }
 
     public void testAdvancedGene() {
-        // Creating test cases for error checking. 
-        // Only one test case should pass
+        String currentGene = null;
+        String[] testCase = new String[8];
+        testCase[0] = "TAGCTGCTAGCTCAGTGACTAAGCTGCA";      // Failure: No ATG
+        testCase[1] = "TATGTCTGCTAGCTC";                   // Failure: No TAA
+        testCase[2] = "TAGCTGCTAGCTCAGTGACTAGCTGCA";       // Failure: No ATG or TAA
+        testCase[3] = "TATGCTGCTAGCTCAGTGTCTAAGCTGCA";     // Failure: ATG and TAA but not multiple of 3
+        testCase[4] = "TATGCTGCTAGCTCAGTAACTGAGCTGCA";     // Success: Proper ATG and TAA and multiple of 3
+        testCase[5] = "AAAAAATATGTCTGCTAAGCTCTAATGCAAG";   // Success: ATG, TAA, and multiple of 3, but first TAA is fake
+        testCase[6] = "TTTTGGGGGATGTACTATAATCATAAGTAAGGG"; // Success: ATG, TAA, multiple of 3, first and second TAA is fake
+        testCase[7] = "GATGGACTGAAATAAGTAAGAT";            // Success: New end codon TGA
 
-        // Failure: No ATG
-        String testCase1 = "TAGCTGCTAGCTCAGTGACTAAGCTGCA";
-        // Failure: No TAA
-        String testCase2 = "TATGTCTGCTAGCTC";
-        // Failure: No ATG or TAA
-        String testCase3 = "TAGCTGCTAGCTCAGTGACTAGCTGCA";
-        // Failure: ATG and TAA but not multiple of 3
-        String testCase4 = "TATGCTGCTAGCTCAGTGACTAAGCTGCA";
-        // Success: Proper ATG and TAA and multiple of 3
-        String testCase5 = "TATGCTGCTAGCTCAGTAACTGAGCTGCA";
-        // Success: ATG, TAA, and multiple of 3, but first TAA is fake
-        String testCase6 = "AAAAAATATGTCTGCTAAGCTCTAATGCAAG";
-        // Success: ATG, TAA, multiple of 3, first and second TAA is fake
-        String testCase7 = "TTTTGGGGGATGTACTATAATCATAAGTAAGGG";
-        // Success: New end codon TGA
-        String testCase8 = "GATGGACTGAAATAAGTAAGAT";
+        String[] resultSet = new String[8];
+        resultSet[0] = "";
+        resultSet[1] = "";
+        resultSet[2] = "";
+        resultSet[3] = "";
+        resultSet[4] = "ATGCTGCTAGCTCAGTAA";
+        resultSet[5] = "ATGTCTGCTAAGCTCTAA";
+        resultSet[6] = "ATGTACTATAATCATAAGTAA";
+        resultSet[7] = "ATGGACTGA";
 
-        // Print the DNA string in pairs with the search result
+
+        // Print a couple of blank lines to separate from running blah
         System.out.println("");
         System.out.println("");
+
+        // Loop through all test cases
+        for (int i = 0; i < testCase.length; i++) {
+            
+            // Find the gene in the DNA strand
+            currentGene = findAdvancedGene(testCase[i]);
+
+            // Determine if it matches the result set
+            if (currentGene.equals(resultSet[i])) {
+                // Passed
+            } else {
+                System.out.println("Test Case: " + i + " failed!");
+                System.out.println("DNA Strand: " + testCase[i]);
+                System.out.println("Returned Gene: " + currentGene);
+                System.out.println("Expected Gene: " + resultSet[i]);
+                System.out.println("");
+            }
+        }
+        System.out.println("All tests finished.");
+        // Print a couple of blank lines to separate from new line
         System.out.println("");
-        // No ATG
-        System.out.println("Test Case 1: No ATG");
-        System.out.println("DNA Strand: " + testCase1);
-        System.out.println("Gene: " + findAdvancedGene(testCase1));
-        System.out.println("");
-        // No TAA
-        System.out.println("Test Case 2: No TAA");
-        System.out.println("DNA Strand: " + testCase2);
-        System.out.println("Gene: " + findAdvancedGene(testCase2));
-        System.out.println("");
-        // No ATG or TAA
-        System.out.println("Test Case 3: No ATG or TAA");
-        System.out.println("DNA Strand: " + testCase3);
-        System.out.println("Gene: " + findAdvancedGene(testCase3));
-        System.out.println("");
-        // ATG and TAA but not multiple of 3
-        System.out.println("Test Case 4: ATG and TAA but not multiple of 3");
-        System.out.println("DNA Strand: " + testCase4);
-        System.out.println("Gene: " + findAdvancedGene(testCase4));
-        System.out.println("");
-        // Proper ATG and TAA and multiple of 3
-        System.out.println("Test Case 5: ATG, TAA, and multiple of 3");
-        System.out.println("DNA Strand: " + testCase5);
-        System.out.println("Gene: " + findAdvancedGene(testCase5));
-        System.out.println("");
-        // ATG, TAA, and multiple of 3, but first TAA is fake
-        System.out.println("Test Case 6: ATG, TAA, and multiple of 3 but first TAA is fake");
-        System.out.println("DNA Strand: " + testCase6);
-        System.out.println("Gene: " + findAdvancedGene(testCase6));
-        System.out.println("");
-        // ATG, TAA, multiple of 3, first and second TAA is fake
-        System.out.println("Test Case 7: ATG, TAA, multiple of 3, first and second TAA is fake");
-        System.out.println("DNA Strand: " + testCase7);
-        System.out.println("Gene: " + findAdvancedGene(testCase7));
-        System.out.println("");
-        // New end codon TGA
-        System.out.println("Test Case 8: New end codon TGA");
-        System.out.println("DNA Strand: " + testCase8);
-        System.out.println("Gene: " + findAdvancedGene(testCase8));
         System.out.println("");
     }
 
