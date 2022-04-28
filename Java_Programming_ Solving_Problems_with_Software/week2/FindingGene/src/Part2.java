@@ -1,4 +1,4 @@
-package perimeterAssignment.src;
+package FindingGene.src;
 
 public class Part2 {
     public String findSimpleGene(String dna, String startCodon, String stopCodon) {

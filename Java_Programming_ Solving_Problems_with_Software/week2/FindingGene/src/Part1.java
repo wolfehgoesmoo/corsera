@@ -1,4 +1,4 @@
-package perimeterAssignment.src;
+package FindingGene.src;
 
 public class Part1 {
     
@@ -31,7 +31,7 @@ public class Part1 {
     public void testSimpleGene() {
         // Creating test cases for error checking. 
         // Only one test case should pass
-        
+
         // No ATG
         String testCase1 = "TAGCTGCTAGCTCAGTGACTAAGCTGCA";
         // No TAA
