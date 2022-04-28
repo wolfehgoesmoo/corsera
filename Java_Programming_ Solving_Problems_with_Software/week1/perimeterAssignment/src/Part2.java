@@ -5,6 +5,21 @@ public class Part2 {
         String gene = null;
         int startCodonIndex = 0;
         int endCodonIndex = 0;
+        String caseState = null;
+
+        // Determine current case state of dna
+        if (dna == dna.toLowerCase()) {
+            // Set state as lower
+            caseState = "lower";
+        } else {
+            // Set state as upper
+            caseState = "upper";
+        }
+
+        // For all input to upper case
+        dna = dna.toUpperCase();
+        startCodon = startCodon.toUpperCase();
+        stopCodon = stopCodon.toUpperCase();
 
         // Find the first and last instances of the start/end codons
         startCodonIndex = dna.indexOf(startCodon);
@@ -21,9 +36,15 @@ public class Part2 {
         // Error Check: If the gene is not made up of codons, then return error
         if (gene.length() % 3 != 0) {
             return "";
+        } 
+        
+        // Check the case to return the gene as
+        if (caseState.equals("lower")) {
+            // Return the gene in lower case
+            return gene.toLowerCase();
         } else {
-            // Return the gene
-            return gene;
+            // Return the gene in upper case
+            return gene.toUpperCase();
         }
     }
 
@@ -56,6 +77,7 @@ public class Part2 {
         System.out.println("Gene: " + testCase4);
         System.out.println("Result: " + findSimpleGene(testCase4, "ATG", "TAA"));
         // Proper ATG and TAA and multiple of 3
+        //testCase5 = testCase5.toLowerCase();
         System.out.println("Gene: " + testCase5);
         System.out.println("Result: " + findSimpleGene(testCase5, "ATG", "TAA"));
     }
