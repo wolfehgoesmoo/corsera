@@ -26,7 +26,7 @@ public class Part3 {
         }
     }
 
-    public void testing() {
+    public void testingTwoOccurences() {
         Part3 p = new Part3();
         // Testing twoOccurrences with 4 test cases
 
@@ -73,9 +73,22 @@ public class Part3 {
             return stringb.substring(match + stringa.length(), stringb.length());
         }
     }
+    
+    public void testingLastPart() {
+        Part3 p = new Part3();
+
+        // Testing lastPart with 2 test cases
+
+        // Failure, stringa not in stringb
+        System.out.println(p.lastPart("zoo", "forest"));
+
+        // Success, stringa in stringb
+        System.out.println(p.lastPart("an", "banana"));
+    }
+    
     public static void main(String[] args) {
         Part3 p = new Part3();
-        //p.testing();
-        System.out.println(p.lastPart("zoo", "forest"));
+        //p.testingTwoOccurences();
+        p.testingLastPart();
     }
 }
