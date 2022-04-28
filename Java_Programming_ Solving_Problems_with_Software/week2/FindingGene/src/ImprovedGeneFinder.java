@@ -9,8 +9,7 @@ public class ImprovedGeneFinder {
         System.out.println("");
 
         ImprovedGeneFinder gf = new ImprovedGeneFinder();
-        // gf.testGetMultipleGenesInDNAStrand();
-        gf.testHowMany();
+        gf.testCountGenes();
     }
 
     public String[] findAdvancedGenes(String dna) {
@@ -188,6 +187,35 @@ public class ImprovedGeneFinder {
             return false;
         }
     }
+    
+    public int howMany(String stringa, String stringb) {
+        int countofStringaInb = 0;
+        int index = 0;
+        
+        // Loop across stringb, find each occurance of string a in it
+        while (true) {
+            // Check for the next occurance of stringa in stringb
+            index = stringb.indexOf(stringa, index);
+            if (DEBUG) { System.out.println("current index: " + index); }
+            
+            // If there isn't one, exit
+            if (index == -1) {
+                break;
+            } else {
+                // Otherwise increment the number of occurrences
+                countofStringaInb++;
+                // And then start the next iteration from after our last found occurrence
+                index = index + stringa.length();
+            }
+        }
+           
+        return countofStringaInb;
+    }
+
+    public int countGenes(String dna) {
+        String[] resultGenes = findAdvancedGenes(dna);
+        return resultGenes.length;
+    }
 
     // Testing methods
     public void testAdvancedGene() {
@@ -238,7 +266,7 @@ public class ImprovedGeneFinder {
     public void testGetMultipleGenesInDNAStrand() {
         // Starting Strand
         String[] dnaStrand = new String[1];
-        dnaStrand[0] = "";
+        dnaStrand[0] = "TACGATGGACTACGTCAGCTAGTXTATGCTACTACGCTGCATGTAACTAAGCATGCTAGCATGCA";
 
         // Result Genes
         // String[] resultSet = new String[3];
@@ -249,6 +277,7 @@ public class ImprovedGeneFinder {
         // Return all captured genes
         String[] resultGenes = findAdvancedGenes(dnaStrand[0]);
         System.out.println("Genes found in DNA Strand: " + dnaStrand[0]);
+        System.out.println("Number of genes found: " + resultGenes.length);
         printArray(resultGenes);
 
         // Compare captured results vs expected results
@@ -261,6 +290,15 @@ public class ImprovedGeneFinder {
         //     }
         // }
         // System.out.println("All tests complete");
+    }
+
+    public void testHowMany() {
+        System.out.println("There are " + howMany("GAA", "ATGAACGAATTGAATC") + " occurrences of GAA in ATGAACGAATTGAATC");
+        System.out.println("There are " + howMany("AA", "ATAAAA") + " occurrences of AA in ATAAAA");
+    }
+
+    public void testCountGenes() {
+        System.out.println("Genes count: " + countGenes("TACGATGGACTACGTCAGCTAGTXTATGCTACTACGCTGCATGTAACTAAGCATGCTAGCATGCA"));
     }
 
     // Helper methods
@@ -306,32 +344,4 @@ public class ImprovedGeneFinder {
         }
     }
 
-    public int howMany(String stringa, String stringb) {
-        int countofStringaInb = 0;
-        int index = 0;
-        
-        // Loop across stringb, find each occurance of string a in it
-        while (true) {
-            // Check for the next occurance of stringa in stringb
-            index = stringb.indexOf(stringa, index);
-            if (DEBUG) { System.out.println("current index: " + index); }
-            
-            // If there isn't one, exit
-            if (index == -1) {
-                break;
-            } else {
-                // Otherwise increment the number of occurrences
-                countofStringaInb++;
-                // And then start the next iteration from after our last found occurrence
-                index = index + stringa.length();
-            }
-        }
-           
-        return countofStringaInb;
-    }
-
-    public void testHowMany() {
-        System.out.println("There are " + howMany("GAA", "ATGAACGAATTGAATC") + " occurrences of GAA in ATGAACGAATTGAATC");
-        System.out.println("There are " + howMany("AA", "ATAAAA") + " occurrences of AA in ATAAAA");
-    }
 }
