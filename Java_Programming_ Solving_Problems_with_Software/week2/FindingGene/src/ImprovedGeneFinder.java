@@ -237,29 +237,29 @@ public class ImprovedGeneFinder {
     public void testGetMultipleGenesInDNAStrand() {
         // Starting Strand
         String[] dnaStrand = new String[1];
-        dnaStrand[0] = "xxxATGxxxTAAxxxATGyyyTAGxxtaazATGvvvxtgabbhhhTGAuuu";
+        dnaStrand[0] = "uuu";
 
         // Result Genes
-        String[] resultSet = new String[3];
-        resultSet[0] = "ATGxxxTAA";
-        resultSet[1] = "ATGyyyTAG";
-        resultSet[2] = "ATGvvvxtgabbhhhTGA";
+        // String[] resultSet = new String[3];
+        // resultSet[0] = "ATGxxxTAA";
+        // resultSet[1] = "ATGyyyTAG";
+        // resultSet[2] = "ATGvvvxtgabbhhhTGA";
 
         // Return all captured genes
         String[] resultGenes = findAdvancedGenes(dnaStrand[0]);
-        // System.out.println("Genes found in DNA Strand: " + dnaStrand[0]);
-        // printArray(resultGenes);
+        System.out.println("Genes found in DNA Strand: " + dnaStrand[0]);
+        printArray(resultGenes);
 
         // Compare captured results vs expected results
-        for (int i = 0; i < resultGenes.length; i++) {
-            if (resultGenes[i].equals(resultSet[i])) {
-                // Pass
-            } else {
-                // Fail
-                System.out.println("Failed on genes: " + resultGenes[i]);
-            }
-        }
-        System.out.println("All tests complete");
+        // for (int i = 0; i < resultGenes.length; i++) {
+        //     if (resultGenes[i].equals(resultSet[i])) {
+        //         // Pass
+        //     } else {
+        //         // Fail
+        //         System.out.println("Failed on genes: " + resultGenes[i]);
+        //     }
+        // }
+        // System.out.println("All tests complete");
     }
 
     // Helper methods
@@ -291,8 +291,17 @@ public class ImprovedGeneFinder {
     }
 
     public void printArray(String[] stringArray) {
-        for (int i = 0; i < stringArray.length; i++) {
-            System.out.println(stringArray[i]);
+        // Check to make sure there are elements in the array
+        if (stringArray.length > 0) {
+
+            // Then loop through it
+            for (int i = 0; i < stringArray.length; i++) {
+                
+                // Print out the element if it's not null
+                if (stringArray[i] != null) {
+                    System.out.println(stringArray[i]);
+                }
+            }
         }
     }
 
