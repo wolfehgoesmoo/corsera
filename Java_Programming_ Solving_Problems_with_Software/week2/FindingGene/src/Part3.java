@@ -21,16 +21,45 @@ public class Part3 {
             if (match == -1) { 
                 return false;
             } else {
-                System.out.println("True, found second occurrence at: " + match);
                 return true;
             }
         }
     }
 
-    public static void main(String[] args) {
+    public void testing() {
         Part3 p = new Part3();
-        if (p.twoOccurrences("a", "appla")) {
+        // Testing twoOccurrences with 4 test cases
+
+        // Fail, no first occurrence
+        System.out.println("Stringa: a");
+        System.out.println("Stringb: bunny");
+        if (p.twoOccurrences("a", "bunny")) {
             System.out.println("True");
         }
+
+        // Fail, no second occurrence
+        System.out.println("Stringa: a");
+        System.out.println("Stringb: apple");
+        if (p.twoOccurrences("a", "apple")) {
+            System.out.println("True");
+        }
+
+        // Success, two occurrences
+        System.out.println("Stringa: a");
+        System.out.println("Stringb: karate");
+        if (p.twoOccurrences("a", "karate")) {
+            System.out.println("True");
+        }
+
+        // Success, more than two occurrences
+        System.out.println("Stringa: a");
+        System.out.println("Stringb: banana");
+        if (p.twoOccurrences("a", "banana")) {
+            System.out.println("True");
+        }
+    }
+    public static void main(String[] args) {
+        Part3 p = new Part3();
+        p.testing();
     }
 }
