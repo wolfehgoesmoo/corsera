@@ -3,12 +3,10 @@ package FindingGene.src;
 public class ImprovedGeneFinder {
     boolean DEBUG = false;
 
-    /*
-        Introducing new stop codons:
-            TGA
-            TAG
-            TAA
-    */
+    public static void main(String[] args) throws Exception {
+        ImprovedGeneFinder gf = new ImprovedGeneFinder();
+        gf.testAdvancedGene();
+    }
 
     public String findAdvancedGene(String dna) {
         String gene = null;
@@ -172,9 +170,12 @@ public class ImprovedGeneFinder {
         System.out.println("");
     }
 
-    public static void main(String[] args) throws Exception {
-        ImprovedGeneFinder gf = new ImprovedGeneFinder();
-        gf.testAdvancedGene();
+    public void testMultipleGenesInSingleDNAStrand() {
+        String[] dnaStrand = new String[0];
+        dnaStrand[0] = "xxxATGxxxTAAxxxATGyyyTAGxxx";
+        String[] resultSet = new String[1];
+        resultSet[0] = "ATGxxxTAA";
+        resultSet[1] = "ATGyyyTAG";
     }
 
     // Helper methods
