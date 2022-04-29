@@ -1,5 +1,9 @@
+import java.io.File;
+
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+
+import edu.duke.DirectoryResource;
 import edu.duke.FileResource;
 
 public class CSVExports {
@@ -102,9 +106,10 @@ public class CSVExports {
         }
     }
 
-    public double dayHighestTemp(CSVParser parser) {
+    public CSVRecord dayHighestTemp(CSVParser parser) {
         String currentRecord = null;
         double dayHighestTemp = 0.0;
+        CSVRecord hottestRecord = null;
 
         // Loop through each record
         for (CSVRecord record : parser) {
@@ -114,14 +119,59 @@ public class CSVExports {
             // Log if the highest temp for the current record
             if (Double.parseDouble(record.get("TemperatureF")) > dayHighestTemp) {
                 dayHighestTemp = Double.parseDouble(record.get("TemperatureF"));
+                hottestRecord = record;
             }
         }
-        return dayHighestTemp;
+        return hottestRecord;
     }
 
-    // public dayHighestAvgTemp() {
+    public double dayHighestAvgTemp(CSVParser parser) {
+        String currentRecord = null;
+        int countOfRecords = 0;
+        double totalTemp = 0.0;
 
-    // }
+        // Loop through each record
+        for (CSVRecord record : parser) {
+            currentRecord = record.get("DateUTC") + 
+                            record.get("TemperatureF");
+            
+            // Sum together the total temperature across all records
+            totalTemp = totalTemp + Double.parseDouble(record.get("TemperatureF"));
+
+            // Increment the number of records
+            countOfRecords++;
+        }
+        return totalTemp / (double)countOfRecords;
+    }
+
+    public CSVRecord dateRangeHighestTemp() {
+        CSVRecord hottestRecord = null;
+        CSVParser parser = null;
+        double dayHighestTemp = 0.0;
+        
+        // Open a folder to select multiple .csv files with weather data
+        DirectoryResource dr = new DirectoryResource();
+        
+        // Loop through each file in the directory
+        for (File f : dr.selectedFiles()) {
+
+            // Load in the specific file and set it up with the CSV parser
+            FileResource fr = new FileResource(f);
+            parser = fr.getCSVParser();
+
+            // Get the highest temperature for current day (file)
+            CSVRecord currentHighestDayTemp = dayHighestTemp(parser);
+
+            // If it is higher than the current highest temperature'd day
+            if (Double.parseDouble(currentHighestDayTemp.get("TemperatureF")) > dayHighestTemp) {
+                // Then update the highest temp and record
+                dayHighestTemp = Double.parseDouble(currentHighestDayTemp.get("TemperatureF"));
+                hottestRecord = currentHighestDayTemp;
+            }
+        }
+
+        return hottestRecord;
+    }
 
 
     // Testing methods
@@ -132,7 +182,13 @@ public class CSVExports {
         // listExportersTwoProducts(parser, "fish", "nuts");
         // System.out.println(numberOfExporters(parser, "sugar"));
         // bigExporters(parser, "$999,999,999,999");
-        System.out.println(dayHighestTemp(parser));
+        // CSVRecord dayHighestTemp = dayHighestTemp(parser);
+        System.out.println("Average hottest temp: " + dayHighestAvgTemp(parser));
+        
+        // System.out.println("Hottest Temp: " + dayHighestTemp.get("TemperatureF"));
+        // CSVRecord dayHighestTemp = dateRangeHighestTemp();
+        // System.out.println("Hottest Temp: " + dayHighestTemp.get("TemperatureF") + 
+        //                    " was on " + dayHighestTemp.get("DateUTC"));
     }
 
     // Helper methods
