@@ -11,7 +11,7 @@ public class BabyNames {
 
     public static void main(String[] args) throws Exception {
         BabyNames bn = new BabyNames();
-        bn.testGetRank();
+        bn.testGetName();
     }
 
    
@@ -76,7 +76,32 @@ public class BabyNames {
         return -1;
     }
 
+    // Returns the name of the person in the file at this rank, for the given gender
+    public String getName(Integer year, Integer rank, String gender) {
+        int rankMale = 0;
+        int rankFemale = 0;
+        String yearBorn = String.valueOf(year);
 
+        // Load in the file
+        FileResource fr = new FileResource(currentFilePath + "yob" + yearBorn + "short.csv");
+
+        // Loop through the current file
+        for (CSVRecord currentRecord : fr.getCSVParser(false)) {
+
+            // Increment rank based on gender
+            if (currentRecord.get(1).contains("M")) {
+                rankMale++;
+            } else {
+                rankFemale++;
+            }
+
+            // Check all the records for the passed in gender and matching rank
+            if (currentRecord.get(1).contains(gender) && rankMale == rank) {
+               return currentRecord.get(0);
+            }
+        }
+        return "NO NAME";
+    }
 
 
 
@@ -95,7 +120,9 @@ public class BabyNames {
         System.out.println("Rank: " + getRank(2012, "Mason", "F"));
     }
 
-
+    public void testGetName() {
+        System.out.println("Name: " + getName(2012, 1, "M"));
+    }
     /*
         Note: Baby name files are laid out as "Name" | "Gender" | "Count"
                                                 0          1         2
