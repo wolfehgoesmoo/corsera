@@ -11,7 +11,7 @@ public class BabyNames {
 
     public static void main(String[] args) throws Exception {
         BabyNames bn = new BabyNames();
-        bn.testGetName();
+        bn.testWhatIsNameInYear();
     }
 
    
@@ -103,6 +103,19 @@ public class BabyNames {
         return "NO NAME";
     }
 
+    public void whatIsNameInYear(String name, int year, int newYear, String gender) {
+       int rank = 0;
+       String newName = null;
+
+        // Get the rank of the passed in name for the year passed in
+       rank = getRank(year, name, gender);
+
+       // Find the name in the desired new year with matching rank
+       newName = getName(newYear, rank, gender);
+
+       // Print out the result
+       System.out.println("New Name: " + newName);
+    }
 
 
 
@@ -123,6 +136,11 @@ public class BabyNames {
     public void testGetName() {
         System.out.println("Name: " + getName(2012, 1, "M"));
     }
+    
+    public void testWhatIsNameInYear() {
+        whatIsNameInYear("Mason", 2012, 2013,"M");
+    }
+
     /*
         Note: Baby name files are laid out as "Name" | "Gender" | "Count"
                                                 0          1         2
