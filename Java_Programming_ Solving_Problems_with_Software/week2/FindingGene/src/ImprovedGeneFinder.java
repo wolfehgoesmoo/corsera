@@ -9,7 +9,7 @@ public class ImprovedGeneFinder {
         System.out.println("");
 
         ImprovedGeneFinder gf = new ImprovedGeneFinder();
-        gf.testCGRatio();
+        gf.testCountCTG();
     }
 
     public String[] findAdvancedGenes(String dna) {
@@ -236,6 +236,10 @@ public class ImprovedGeneFinder {
         return cgRatio;
     }
 
+    public int countCTG(String dna) {
+        return howMany("CTG", dna);
+    }
+    
     // Testing methods
     public void testAdvancedGene() {
         String currentGene = null;
@@ -323,6 +327,11 @@ public class ImprovedGeneFinder {
     public void testCGRatio() {
         System.out.println("cgRatio: " + cgRatio("ATGCCATAG"));
     }
+    
+    public void testCountCTG() {
+        System.out.println("CTG Count: " + countCTG("ATGCTGCTCGCTGCTCGCTCGTGCGTCGGCTTGCTGCATAG"));
+    }
+    
     // Helper methods
     public boolean isLowerCase(String s) {
         if (s == s.toLowerCase()) {
