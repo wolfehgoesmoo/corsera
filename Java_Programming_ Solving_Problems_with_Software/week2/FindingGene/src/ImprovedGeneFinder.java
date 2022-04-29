@@ -1,5 +1,8 @@
 package FindingGene.src;
 
+import edu.duke.FileResource;
+import edu.duke.StorageResource;
+
 public class ImprovedGeneFinder {
     boolean DEBUG = false;
 
@@ -9,16 +12,20 @@ public class ImprovedGeneFinder {
         System.out.println("");
 
         ImprovedGeneFinder gf = new ImprovedGeneFinder();
-        gf.testCountCTG();
+        gf.testProcessGenes();
     }
 
-    public String[] findAdvancedGenes(String dna) {
+    public StorageResource findAdvancedGenes(String dna) {
         int startCodonIndex = 0;
         int stopCodonIndex = 0;
         int currentStartIndex = 0;
         String currentGene = null;
-        String[] genes = new String[1];
-        boolean firstGene = true;
+        StorageResource genes = new StorageResource();
+        boolean caseIsLower = false;
+
+        // Determine current case state of dna, then convert to upper case
+        caseIsLower = isLowerCase(dna);
+        dna = dna.toUpperCase();
 
         // Loop through the dna strand for each occurrence of the start codon "ATG" until
         // we've gone through the entire strand and there are no more starting codon sequences.
@@ -42,20 +49,14 @@ public class ImprovedGeneFinder {
             currentGene = dna.substring(startCodonIndex, stopCodonIndex + 3);
             if (DEBUG) { System.out.println("Gene: " + currentGene); }
             
-            // If it's the first discovered gene, set it as the first element of the array
-            if (firstGene) {
-                genes[0] = currentGene;
-                firstGene = false;
-            } else {
-                // Otherwise, add it to the end of the array
-                genes = appendStringToArray(currentGene, genes);
-            }
+            // Add the currentGene to the list of genes
+            genes.add(currentGene);
 
             // Set the next index to be after the end of the first discovered gene
             currentStartIndex = (stopCodonIndex + 3);
             if (DEBUG) { System.out.println("New starting index: " + currentStartIndex); }
         }
-        // Return the genes array
+        // Return the genes
         return genes;
     }
 
@@ -196,7 +197,7 @@ public class ImprovedGeneFinder {
         while (true) {
             // Check for the next occurance of stringa in stringb
             index = stringb.indexOf(stringa, index);
-            if (DEBUG) { System.out.println("current index: " + index); }
+            // if (DEBUG) { System.out.println("current index: " + index); }
             
             // If there isn't one, exit
             if (index == -1) {
@@ -213,8 +214,8 @@ public class ImprovedGeneFinder {
     }
 
     public int countGenes(String dna) {
-        String[] resultGenes = findAdvancedGenes(dna);
-        return resultGenes.length;
+        StorageResource resultGenes = findAdvancedGenes(dna);
+        return resultGenes.size();
     }
 
     public double cgRatio(String dna) {
@@ -228,9 +229,10 @@ public class ImprovedGeneFinder {
         if (DEBUG) { System.out.println("C: " + cCount); }
         gCount = howMany("G", dna);
         if (DEBUG) { System.out.println("G: " + gCount); }
+        if (DEBUG) { System.out.println("Length: " + dnaLength); }
 
         // Create the ratio
-        cgRatio = 4 / dnaLength;
+        cgRatio = (cCount + gCount) / dnaLength;
         if (DEBUG) { System.out.println("ratio: " + cgRatio); }
 
         return cgRatio;
@@ -240,6 +242,55 @@ public class ImprovedGeneFinder {
         return howMany("CTG", dna);
     }
     
+    public void processGenes(StorageResource sr) {
+        int count = 0;
+
+        // Print all the Strings in sr that are longer than 9 characters
+        for (String currentString : sr.data()) {
+            if (currentString.length() > 60) {
+                System.out.println("Longer than 60 characters: " + currentString);
+            }
+        }
+        System.out.println("----------------------------------------------------------------");
+
+        // Print the number of Strings in sr that are longer than 9 characters
+        for (String currentString : sr.data()) {
+            if (currentString.length() > 60) {
+                count++;
+            }
+        }
+        System.out.println("Total number of strings longer than 60 characters: " + count);
+        count = 0;
+        System.out.println("----------------------------------------------------------------");
+
+        // Print the Strings in sr whose C-G-ratio is higher than 0.35
+        for (String currentString : sr.data()) {
+            if (cgRatio(currentString) > 0.35) {
+                System.out.println("C-G Ratio Higher than 0.35: " + currentString);
+            }
+        }
+        System.out.println("----------------------------------------------------------------");
+
+        // Print the number of strings in sr whose C-G-ratio is higher than 0.35
+        for (String currentString : sr.data()) {
+            if (cgRatio(currentString) > 0.35) {
+                count++;
+            }
+        }
+        System.out.println("Total number of strings with C-G ratio higher than 0.35: " + count);
+        count = 0;
+        System.out.println("----------------------------------------------------------------");
+
+        // Print the length of the longest gene in sr
+        for (String currentString : sr.data()) {
+            if (currentString.length() > count) {
+                count = currentString.length();
+            }
+        }
+        System.out.println("Longest length of a gene: " + count);
+        System.out.println("----------------------------------------------------------------");
+    }
+
     // Testing methods
     public void testAdvancedGene() {
         String currentGene = null;
@@ -286,10 +337,10 @@ public class ImprovedGeneFinder {
         System.out.println("");
     }
 
-    public void testGetMultipleGenesInDNAStrand() {
+    public void testGetMultipleGenesInDNAStrand(String dna) {
         // Starting Strand
-        String[] dnaStrand = new String[1];
-        dnaStrand[0] = "AATGCTAACTAGCTGACTAAT";
+        // String[] dnaStrand = new String[1];
+        // dnaStrand[0] = "AATGCTAACTAGCTGACTAAT";
 
         // Result Genes
         // String[] resultSet = new String[3];
@@ -298,10 +349,10 @@ public class ImprovedGeneFinder {
         // resultSet[2] = "ATGvvvxtgabbhhhTGA";
 
         // Return all captured genes
-        String[] resultGenes = findAdvancedGenes(dnaStrand[0]);
-        System.out.println("Genes found in DNA Strand: " + dnaStrand[0]);
-        System.out.println("Number of genes found: " + resultGenes.length);
-        printArray(resultGenes);
+        StorageResource resultGenes = findAdvancedGenes(dna);
+        System.out.println("Genes found in DNA Strand: " + dna);
+        printStorageResource(resultGenes);
+        System.out.println("Number of genes found: " + resultGenes.size());
 
         // Compare captured results vs expected results
         // for (int i = 0; i < resultGenes.length; i++) {
@@ -332,6 +383,53 @@ public class ImprovedGeneFinder {
         System.out.println("CTG Count: " + countCTG("ATGCTGCTCGCTGCTCGCTCGTGCGTCGGCTTGCTGCATAG"));
     }
     
+    public void testProcessGenes() {
+        StorageResource sr = new StorageResource();
+
+        // Read in a file containing DNA information, convert it to a string
+        FileResource fr = new FileResource();
+        String dna = fr.asString();
+
+        // Create a resource with all genes from the dna strand
+        sr = findAdvancedGenes(dna);
+
+        // Sneak peak into the genes first
+        testGetMultipleGenesInDNAStrand(dna);
+
+        // Then process them
+        processGenes(sr);
+        // System.out.println("Count: " + countCTG(dna));
+    }
+
+    public void printDNA() {
+        String finalString = "";
+        int count = 0;
+
+        // Open the file
+        FileResource fr = new FileResource();
+
+        // Read it in as a string
+        String dna = fr.asString();
+        
+        // Convert it to a char array
+        char[] chars = dna.toCharArray();
+ 
+        // Loop through each character
+        for (char ch: chars) {
+            
+            // If count is 3 characters, then add a space
+            if (count == 3) {
+                finalString = finalString + " ";
+                finalString = finalString + ch;
+                count = 0;
+            } else {
+                finalString = finalString + ch;
+            }
+            count++;
+        }
+        System.out.println(finalString.toUpperCase());
+    }
+
     // Helper methods
     public boolean isLowerCase(String s) {
         if (s == s.toLowerCase()) {
@@ -375,4 +473,9 @@ public class ImprovedGeneFinder {
         }
     }
 
+    public void printStorageResource(StorageResource sr) {
+        for (String currentString : sr.data()) {
+            System.out.println(currentString);
+        }
+    }
 }
