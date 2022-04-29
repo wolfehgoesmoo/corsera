@@ -5,9 +5,13 @@ import org.apache.commons.csv.CSVRecord;
 import edu.duke.FileResource;
 
 public class BabyNames {
+    String filePath = "Java_Programming_ Solving_Problems_with_Software/week4/course_project_files";
+    String currentFilePath = filePath + "/us_babynames_test/";
+
+
     public static void main(String[] args) throws Exception {
         BabyNames bn = new BabyNames();
-        bn.testTotalBirths();
+        bn.testGetRank();
     }
 
    
@@ -39,7 +43,38 @@ public class BabyNames {
         System.out.println("Total Names: " + (totalGirl + totalBoy));
     }
 
+    // Returns the rank of the name in the file for the given gender
+    public int getRank(Integer year, String name, String gender) {
+        int rankMale = 0;
+        int rankFemale = 0;
+        String yearBorn = String.valueOf(year);
 
+        // Load in the file
+        FileResource fr = new FileResource(currentFilePath + "yob" + yearBorn + "short.csv");
+        // FileResource fr = new FileResource(currentFilePath + "yob2012short.csv");
+
+        for (CSVRecord currentRecord : fr.getCSVParser(false)) {
+
+            // Increment rank based on gender
+            if (currentRecord.get(1).contains("M")) {
+                rankMale++;
+            } else {
+                rankFemale++;
+            }
+
+            // Check all the records for the passed in name and matching gender
+            if (currentRecord.get(0).contains(name) && currentRecord.get(1).contains(gender)) {
+                // Check the passed in gener, return appropriate rank
+                if (gender.equals("M")) {
+                    return rankMale;
+                } else {
+                    return rankFemale;
+                }
+            }
+        }
+        // If the name is not in the file, return -1
+        return -1;
+    }
 
 
 
@@ -56,6 +91,9 @@ public class BabyNames {
         getTotalBirthsPerFile(fr);
     }
 
+    public void testGetRank() {
+        System.out.println("Rank: " + getRank(2012, "Mason", "F"));
+    }
 
 
     /*
