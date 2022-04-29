@@ -11,12 +11,12 @@ import edu.duke.FileResource;
 public class BabyNames {
     String filePath = "Java_Programming_ Solving_Problems_with_Software/week4/course_project_files";
     String currentFilePath = filePath + "/us_babynames_test/";
-    boolean DEBUG = false;
+    boolean DEBUG = true;
 
 
     public static void main(String[] args) throws Exception {
         BabyNames bn = new BabyNames();
-        bn.testYearOfHighestRank();
+        bn.testGetAverageRank();
     }
 
    
@@ -151,7 +151,7 @@ public class BabyNames {
        System.out.println("New Name: " + newName);
     }
 
-    // Use range of files to returns the year with the highest rank for given name and gender
+    // Use range of files to return the year with the highest rank for given name and gender
     public int yearOfHighestRank(String name, String gender) {
         int rankMale = 0;
         int rankFemale = 0;
@@ -189,7 +189,50 @@ public class BabyNames {
         return year;
     }
 
+    // Use range of files to return the average rank of the name and gender
+    public double getAverageRank(String name, String gender) {
+        int currentYear = 0;
+        int countOfYears = 0;
+        int currentRank = 0;
+        int totalRank = 0;
+        
+        // Open a folder to select multiple .csv files with weather data
+        DirectoryResource dr = new DirectoryResource();
+                
+        // Loop through each file in the directory
+        for (File f : dr.selectedFiles()) {
 
+            // Load in the specific file and set it up with the CSV parser
+            FileResource fr = new FileResource(f);
+
+            // Get the current year from the loaded file
+            currentYear = Integer.parseInt(f.getName().replaceAll("[^0-9]", ""));
+
+            // Search the current file for the name and gender and return its rank
+            currentRank = getRank(currentYear, name, gender, fr);
+            if (DEBUG) { System.out.println("Rank for " + name + " is " + currentRank + " in " + currentYear); }
+
+            // If the rank was found
+            if (currentRank != -1) {
+                // Increment the number of years that the name has been in 
+                countOfYears++;
+
+                // Keep a running total of ranks
+                totalRank += currentRank;
+
+            }
+        }
+        if (DEBUG) { System.out.println("Total rank: " + totalRank); }
+        if (DEBUG) { System.out.println("Total years: " + countOfYears); }
+
+        // Check the average, make sure it's not 0
+        if (totalRank != 0 || countOfYears != 0) {
+            return (double)totalRank / (double)countOfYears;
+        } else {
+            return -1;
+        }
+        
+    }
 
 
 
@@ -213,9 +256,14 @@ public class BabyNames {
     }
 
     public void testYearOfHighestRank() {
-        int year = yearOfHighestRank("Mason", "F");
-        System.out.println("Mason is ranked highest in year " + year);
+        int year = yearOfHighestRank("Billy", "M");
+        System.out.println("Billy is ranked highest in year " + year);
     }
+    
+    public void testGetAverageRank() {
+        System.out.println("Average rank is " + getAverageRank("Jacob", "M"));
+    }
+    
     /*
         Note: Baby name files are laid out as "Name" | "Gender" | "Count"
                                                 0          1         2
