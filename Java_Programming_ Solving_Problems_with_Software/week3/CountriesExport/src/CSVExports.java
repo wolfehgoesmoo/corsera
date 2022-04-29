@@ -1,7 +1,6 @@
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import edu.duke.FileResource;
-import edu.duke.StorageResource;
 
 public class CSVExports {
     public static void main(String[] args) throws Exception {
@@ -38,7 +37,7 @@ public class CSVExports {
                 
                 // Update the countries info
                 countryInfo = currentRecord;
-                System.out.println(currentRecord);
+                //System.out.println(currentRecord);
             }
  
         }
@@ -107,13 +106,13 @@ public class CSVExports {
     public void tester() {
         FileResource fr = new FileResource();
         CSVParser parser = fr.getCSVParser();
-        // System.out.println(countryInfo(parser, "Germany"));
-        // listExportersTwoProducts(parser, "gold", "diamonds");
-        // System.out.println(numberOfExporters(parser, "gold"));
-        bigExporters(parser, "$999,999,999");
+        // System.out.println(countryInfo(parser, "Nauru"));
+        // listExportersTwoProducts(parser, "fish", "nuts");
+        // System.out.println(numberOfExporters(parser, "sugar"));
+        bigExporters(parser, "$999,999,999,999");
     }
 
-    // Helper method
+    // Helper methods
     public long strAmountToLong(String amount) {
         String moneyAsString = null;
 
