@@ -102,6 +102,28 @@ public class CSVExports {
         }
     }
 
+    public double dayHighestTemp(CSVParser parser) {
+        String currentRecord = null;
+        double dayHighestTemp = 0.0;
+
+        // Loop through each record
+        for (CSVRecord record : parser) {
+            currentRecord = record.get("DateUTC") + 
+                            record.get("TemperatureF");
+
+            // Log if the highest temp for the current record
+            if (Double.parseDouble(record.get("TemperatureF")) > dayHighestTemp) {
+                dayHighestTemp = Double.parseDouble(record.get("TemperatureF"));
+            }
+        }
+        return dayHighestTemp;
+    }
+
+    // public dayHighestAvgTemp() {
+
+    // }
+
+
     // Testing methods
     public void tester() {
         FileResource fr = new FileResource();
@@ -109,7 +131,8 @@ public class CSVExports {
         // System.out.println(countryInfo(parser, "Nauru"));
         // listExportersTwoProducts(parser, "fish", "nuts");
         // System.out.println(numberOfExporters(parser, "sugar"));
-        bigExporters(parser, "$999,999,999,999");
+        // bigExporters(parser, "$999,999,999,999");
+        System.out.println(dayHighestTemp(parser));
     }
 
     // Helper methods
