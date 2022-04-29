@@ -50,12 +50,30 @@ public class CSVExports {
         }
     }
 
+    // Prints the names of all the countries that have both exportItem1 and exportItem2 as export items.
+    public void listExportersTwoProducts(CSVParser parser, String exportItem1, String exportItem2) {
+        String currentRecord = null;
+
+        // Loop through each record
+        for (CSVRecord record : parser) {
+            currentRecord = record.get("Country") + ": " + 
+                            record.get("Exports") + ": " + 
+                            record.get("Value (dollars)");
+
+            // Only print out records related to the passed in country
+            if (currentRecord.contains(exportItem1) && currentRecord.contains(exportItem2)) {
+                System.out.println(record.get("Country"));
+            }
+        }
+    }
+    
+    
+    
     // Testing methods
     public void tester() {
         FileResource fr = new FileResource();
         CSVParser parser = fr.getCSVParser();
-        String countryInfo = countryInfo(parser, "China");
-
-        System.out.println(countryInfo);
+        // String countryInfo = countryInfo(parser, "Germany");
+        listExportersTwoProducts(parser, "gold", "diamonds");
     }
 }
