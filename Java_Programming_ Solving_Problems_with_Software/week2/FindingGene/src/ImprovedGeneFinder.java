@@ -9,7 +9,7 @@ public class ImprovedGeneFinder {
         System.out.println("");
 
         ImprovedGeneFinder gf = new ImprovedGeneFinder();
-        gf.testCountGenes();
+        gf.testCGRatio();
     }
 
     public String[] findAdvancedGenes(String dna) {
@@ -217,6 +217,25 @@ public class ImprovedGeneFinder {
         return resultGenes.length;
     }
 
+    public double cgRatio(String dna) {
+        double cgRatio = 0.0;
+        int cCount = 0;
+        int gCount = 0;
+        double dnaLength = dna.length();
+
+        // Get the total number of cytosine and guanine nucleotides
+        cCount = howMany("C", dna);
+        if (DEBUG) { System.out.println("C: " + cCount); }
+        gCount = howMany("G", dna);
+        if (DEBUG) { System.out.println("G: " + gCount); }
+
+        // Create the ratio
+        cgRatio = 4 / dnaLength;
+        if (DEBUG) { System.out.println("ratio: " + cgRatio); }
+
+        return cgRatio;
+    }
+
     // Testing methods
     public void testAdvancedGene() {
         String currentGene = null;
@@ -266,7 +285,7 @@ public class ImprovedGeneFinder {
     public void testGetMultipleGenesInDNAStrand() {
         // Starting Strand
         String[] dnaStrand = new String[1];
-        dnaStrand[0] = "TACGATGGACTACGTCAGCTAGTXTATGCTACTACGCTGCATGTAACTAAGCATGCTAGCATGCA";
+        dnaStrand[0] = "AATGCTAACTAGCTGACTAAT";
 
         // Result Genes
         // String[] resultSet = new String[3];
@@ -301,6 +320,9 @@ public class ImprovedGeneFinder {
         System.out.println("Genes count: " + countGenes("TACGATGGACTACGTCAGCTAGTXTATGCTACTACGCTGCATGTAACTAAGCATGCTAGCATGCA"));
     }
 
+    public void testCGRatio() {
+        System.out.println("cgRatio: " + cgRatio("ATGCCATAG"));
+    }
     // Helper methods
     public boolean isLowerCase(String s) {
         if (s == s.toLowerCase()) {
