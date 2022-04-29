@@ -116,6 +116,11 @@ public class CSVExports {
             currentRecord = record.get("DateUTC") + 
                             record.get("TemperatureF");
 
+            // Check to make sure temperature is a number
+            if (record.get("TemperatureF").equals("-9999")) {
+                continue;
+            }
+
             // Log if the highest temp for the current record
             if (Double.parseDouble(record.get("TemperatureF")) > dayHighestTemp) {
                 dayHighestTemp = Double.parseDouble(record.get("TemperatureF"));
@@ -123,25 +128,6 @@ public class CSVExports {
             }
         }
         return hottestRecord;
-    }
-
-    public double dayHighestAvgTemp(CSVParser parser) {
-        String currentRecord = null;
-        int countOfRecords = 0;
-        double totalTemp = 0.0;
-
-        // Loop through each record
-        for (CSVRecord record : parser) {
-            currentRecord = record.get("DateUTC") + 
-                            record.get("TemperatureF");
-            
-            // Sum together the total temperature across all records
-            totalTemp = totalTemp + Double.parseDouble(record.get("TemperatureF"));
-
-            // Increment the number of records
-            countOfRecords++;
-        }
-        return totalTemp / (double)countOfRecords;
     }
 
     public CSVRecord dateRangeHighestTemp() {
@@ -183,6 +169,11 @@ public class CSVExports {
             currentRecord = record.get("DateUTC") + 
                             record.get("TemperatureF");
 
+            // Check to make sure temperature is a number
+            if (record.get("TemperatureF").equals("-9999")) {
+                continue;
+            }
+
             // Log if the highest temp for the current record
             if (Double.parseDouble(record.get("TemperatureF")) < dayLowestTemp) {
                 dayLowestTemp = Double.parseDouble(record.get("TemperatureF"));
@@ -220,40 +211,122 @@ public class CSVExports {
         return coldestRecord;
     }
 
-    // public double dayHighestAvgTemp(CSVParser parser) {
-    //     String currentRecord = null;
-    //     int countOfRecords = 0;
-    //     double totalTemp = 0.0;
+    public CSVRecord dayLowestHumidity(CSVParser parser) {
+        String currentRecord = null;
+        double dayLowestHumidity = 200.0;
+        CSVRecord humidRecord = null;
 
-    //     // Loop through each record
-    //     for (CSVRecord record : parser) {
-    //         currentRecord = record.get("DateUTC") + 
-    //                         record.get("TemperatureF");
+        // Loop through each record
+        for (CSVRecord record : parser) {
+            currentRecord = record.get("DateUTC") + 
+                            record.get("Humidity");
+
+            // Check to make sure humidity is a number
+            if (record.get("Humidity").equals("N/A")) {
+                continue;
+            }
+
+            // Log if the highest temp for the current record
+            if (Double.parseDouble(record.get("Humidity")) < dayLowestHumidity) {
+                dayLowestHumidity = Double.parseDouble(record.get("Humidity"));
+                humidRecord = record;
+            }
+        }
+        return humidRecord;
+    }
+
+    public CSVRecord dateRangeLowestHumidity() {
+        CSVRecord humidRecord = null;
+        CSVParser parser = null;
+        double dayLowestHumidity = 200.0;
+        
+        // Open a folder to select multiple .csv files with weather data
+        DirectoryResource dr = new DirectoryResource();
+        
+        // Loop through each file in the directory
+        for (File f : dr.selectedFiles()) {
+
+            // Load in the specific file and set it up with the CSV parser
+            FileResource fr = new FileResource(f);
+            parser = fr.getCSVParser();
+
+            // Get the highest humidity for current day (file)
+            CSVRecord currentLowestDayHumidity = dayLowestHumidity(parser);
+
+            // If it is higher than the current highest humidity'd day
+            if (Double.parseDouble(currentLowestDayHumidity.get("Humidity")) < dayLowestHumidity) {
+                // Then update the highest temp and record
+                dayLowestHumidity = Double.parseDouble(currentLowestDayHumidity.get("Humidity"));
+                humidRecord = currentLowestDayHumidity;
+            }
+        }
+        return humidRecord;
+    }
+
+    public double dayAvgTemp(CSVParser parser) {
+        String currentRecord = null;
+        int countOfRecords = 0;
+        double totalTemp = 0.0;
+
+        // Loop through each record
+        for (CSVRecord record : parser) {
+            currentRecord = record.get("DateUTC") + 
+                            record.get("TemperatureF");
+
+            // Check to make sure temperature is a number
+            if (record.get("TemperatureF").equals("-9999")) {
+                continue;
+            }
             
-    //         // Sum together the total temperature across all records
-    //         totalTemp = totalTemp + Double.parseDouble(record.get("TemperatureF"));
+            // Sum together the total temperature across all records
+            totalTemp = totalTemp + Double.parseDouble(record.get("TemperatureF"));
 
-    //         // Increment the number of records
-    //         countOfRecords++;
-    //     }
-    //     return totalTemp / (double)countOfRecords;
-    // }
+            // Increment the number of records
+            countOfRecords++;
+        }
+        return totalTemp / (double)countOfRecords;
+    }
 
-    
+    public double avgTempHighHumidity(CSVParser parser, double value) {
+        int countOfRecords = 0;
+        double totalTemp = 0.0;
 
+        // Loop through each record
+        for (CSVRecord record : parser) {
+
+            // Check to make sure temperature is a number
+            if (record.get("TemperatureF").equals("-9999") || 
+                record.get("Humidity").equals("N/A")) {
+                continue;
+            }
+
+            // If the humidity specified is greater than humidity of the day
+            if (Double.parseDouble(record.get("Humidity")) >= value) {
+
+                // Sum together the total temperature across all records
+                totalTemp = totalTemp + Double.parseDouble(record.get("TemperatureF"));
+
+                // Increment the number of records
+                countOfRecords++;
+            }
+        }
+        return totalTemp / (double)countOfRecords;
+    }
 
     // Testing methods
     public void tester() {
+        
         // FileResource fr = new FileResource();
         // CSVParser parser = fr.getCSVParser();
+
+        // Exports
         // System.out.println(countryInfo(parser, "Nauru"));
-        // listExportersTwoProducts(parser, "fish", "nuts");
-        // System.out.println(numberOfExporters(parser, "sugar"));
+        // listExportersTwoProducts(parser, "cotton", "flowers");
+        // System.out.println(numberOfExporters(parser, "cocoa"));
         // bigExporters(parser, "$999,999,999,999");
 
         // Hot
         // CSVRecord dayHighestTemp = dayHighestTemp(parser);
-        // System.out.println("Average hottest temp: " + dayHighestAvgTemp(parser));
         // System.out.println("Hottest Temp: " + dayHighestTemp.get("TemperatureF"));
         // CSVRecord dayHighestTemp = dateRangeHighestTemp();
         // System.out.println("Hottest Temp: " + dayHighestTemp.get("TemperatureF") + 
@@ -262,10 +335,22 @@ public class CSVExports {
         // Cold
         // CSVRecord dayLowestTemp = dayLowestTemp(parser);
         // System.out.println("Coldest Temp: " + dayLowestTemp.get("TemperatureF"));
-
         CSVRecord dayLowestTemp = dateRangeLowestTemp();
         System.out.println("Lowest Temp: " + dayLowestTemp.get("TemperatureF") + 
                            " was on " + dayLowestTemp.get("DateUTC"));
+
+        // Humidity
+        // CSVRecord dayLowestHumidity = dayLowestHumidity(parser);
+        // System.out.println("Lowest Humidity: " + dayLowestHumidity.get("Humidity") + 
+        //                    " was on " + dayLowestHumidity.get("DateUTC"));
+        // CSVRecord dayLowestHumidity = dateRangeLowestHumidity();
+        // System.out.println("Lowest Humidity: " + dayLowestHumidity.get("Humidity") + 
+        //                    " was on " + dayLowestHumidity.get("DateUTC"));
+
+
+        // Average
+        // System.out.println("Average temp: " + dayAvgTemp(parser));
+        // System.out.println("Average temp with humidity over 80: " + avgTempHighHumidity(parser, 80));
     }
 
     // Helper methods
