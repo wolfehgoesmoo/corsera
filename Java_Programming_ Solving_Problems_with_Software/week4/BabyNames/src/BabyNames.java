@@ -1,17 +1,22 @@
 package src;
 
+import java.io.File;
+
+import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
+import edu.duke.DirectoryResource;
 import edu.duke.FileResource;
 
 public class BabyNames {
     String filePath = "Java_Programming_ Solving_Problems_with_Software/week4/course_project_files";
     String currentFilePath = filePath + "/us_babynames_test/";
+    boolean DEBUG = false;
 
 
     public static void main(String[] args) throws Exception {
         BabyNames bn = new BabyNames();
-        bn.testWhatIsNameInYear();
+        bn.testYearOfHighestRank();
     }
 
    
@@ -52,6 +57,35 @@ public class BabyNames {
         // Load in the file
         FileResource fr = new FileResource(currentFilePath + "yob" + yearBorn + "short.csv");
         // FileResource fr = new FileResource(currentFilePath + "yob2012short.csv");
+
+        for (CSVRecord currentRecord : fr.getCSVParser(false)) {
+
+            // Increment rank based on gender
+            if (currentRecord.get(1).contains("M")) {
+                rankMale++;
+            } else {
+                rankFemale++;
+            }
+
+            // Check all the records for the passed in name and matching gender
+            if (currentRecord.get(0).contains(name) && currentRecord.get(1).contains(gender)) {
+                // Check the passed in gener, return appropriate rank
+                if (gender.equals("M")) {
+                    return rankMale;
+                } else {
+                    return rankFemale;
+                }
+            }
+        }
+        // If the name is not in the file, return -1
+        return -1;
+    }
+
+    // Returns the rank of the name in the file for the given gender
+    public int getRank(Integer year, String name, String gender, FileResource fr) {
+        int rankMale = 0;
+        int rankFemale = 0;
+        String yearBorn = String.valueOf(year);
 
         for (CSVRecord currentRecord : fr.getCSVParser(false)) {
 
@@ -117,6 +151,43 @@ public class BabyNames {
        System.out.println("New Name: " + newName);
     }
 
+    // Use range of files to returns the year with the highest rank for given name and gender
+    public int yearOfHighestRank(String name, String gender) {
+        int rankMale = 0;
+        int rankFemale = 0;
+        int year = -1;
+        int currentYear = 0;
+        int rank = 2147483647;
+        int currentrank = 0;
+
+        // Open a folder to select multiple .csv files with weather data
+        DirectoryResource dr = new DirectoryResource();
+                
+        // Loop through each file in the directory
+        for (File f : dr.selectedFiles()) {
+
+            // Load in the specific file and set it up with the CSV parser
+            FileResource fr = new FileResource(f);
+
+            // Get the current year from the loaded file
+            currentYear = Integer.parseInt(f.getName().replaceAll("[^0-9]", ""));
+
+            // Search the current file for the name and gender and return its rank
+            currentrank = getRank(currentYear, name, gender, fr);
+            if (DEBUG) { System.out.println("Rank for " + name + " is " + currentrank + " in " + currentYear); }
+
+            // If the rank was found
+            if (currentrank != -1) {
+                // If the captured rank is less than the current rank, replace it
+                if (currentrank < rank) {
+                    rank = currentrank;
+                    // also update year with the year that the lowest rank was determined
+                    year = currentYear;
+                }
+            }
+        }
+        return year;
+    }
 
 
 
@@ -141,6 +212,10 @@ public class BabyNames {
         whatIsNameInYear("Mason", 2012, 2013,"M");
     }
 
+    public void testYearOfHighestRank() {
+        int year = yearOfHighestRank("Mason", "F");
+        System.out.println("Mason is ranked highest in year " + year);
+    }
     /*
         Note: Baby name files are laid out as "Name" | "Gender" | "Count"
                                                 0          1         2
