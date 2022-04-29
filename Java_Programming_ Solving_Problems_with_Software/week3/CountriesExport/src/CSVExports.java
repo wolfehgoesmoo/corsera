@@ -67,13 +67,31 @@ public class CSVExports {
         }
     }
     
-    
+    // Returns the number of countries that export exportItem
+    public int numberOfExporters(CSVParser parser, String exportItem) {
+        String currentRecord = null;
+        int numCountries = 0;
+
+        // Loop through each record
+        for (CSVRecord record : parser) {
+            currentRecord = record.get("Country") + ": " + 
+                            record.get("Exports") + ": " + 
+                            record.get("Value (dollars)");
+
+            // Only print out records related to the passed in country
+            if (currentRecord.contains(exportItem)) {
+                numCountries++;
+            }
+        }
+        return numCountries;
+    }
     
     // Testing methods
     public void tester() {
         FileResource fr = new FileResource();
         CSVParser parser = fr.getCSVParser();
-        // String countryInfo = countryInfo(parser, "Germany");
-        listExportersTwoProducts(parser, "gold", "diamonds");
+        // System.out.println(countryInfo(parser, "Germany"));
+        // listExportersTwoProducts(parser, "gold", "diamonds");
+        System.out.println(numberOfExporters(parser, "gold"));
     }
 }
