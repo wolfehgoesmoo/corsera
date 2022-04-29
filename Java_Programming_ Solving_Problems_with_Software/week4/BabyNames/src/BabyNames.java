@@ -8,7 +8,7 @@ import edu.duke.FileResource;
 public class BabyNames {
     String filePath = "Java_Programming_ Solving_Problems_with_Software/week4/course_project_files";
     String currentFilePath = filePath + "/us_babynames_test/";
-    boolean DEBUG = false;
+    boolean DEBUG = true;
     int nameHeader = 0;
     int genderHeader = 1;
     int birthCountHeader = 2;
@@ -19,7 +19,7 @@ public class BabyNames {
         bn.testGetTotalBirthsRankedHigher();
     }
 
-   
+   // Prints the total number of births 
     public void getTotalBirths(FileResource fr) {
         int numBorn = 0;
         int totalBirths = 0;
@@ -55,7 +55,7 @@ public class BabyNames {
         for (CSVRecord currentRecord : fr.getCSVParser(false)) {
             
             // If the current record matches the passed in details
-            if (currentRecord.get(nameHeader).contains(name) && currentRecord.get(genderHeader).contains(gender)) {
+            if (currentRecord.get(nameHeader).equals(name) && currentRecord.get(genderHeader).contains(gender)) {
                 return Integer.parseInt(currentRecord.get(birthCountHeader));
             }
         }
@@ -69,8 +69,8 @@ public class BabyNames {
         String yearBorn = String.valueOf(year);
 
         // Load in the file
-        FileResource fr = new FileResource(currentFilePath + "yob" + yearBorn + "short.csv");
-        // FileResource fr = new FileResource(currentFilePath + "yob2012short.csv");
+        FileResource fr = new FileResource();
+        // FileResource fr = new FileResource(currentFilePath + "yob" + yearBorn + "short.csv");
 
         for (CSVRecord currentRecord : fr.getCSVParser(false)) {
 
@@ -82,7 +82,7 @@ public class BabyNames {
             }
 
             // Check all the records for the passed in name and matching gender
-            if (currentRecord.get(nameHeader).contains(name) && currentRecord.get(genderHeader).contains(gender)) {
+            if (currentRecord.get(nameHeader).equals(name) && currentRecord.get(genderHeader).contains(gender)) {
                 // Check the passed in gener, return appropriate rank
                 if (gender.equals("M")) {
                     return rankMale;
@@ -110,7 +110,7 @@ public class BabyNames {
             }
 
             // Check all the records for the passed in name and matching gender
-            if (currentRecord.get(nameHeader).contains(name) && currentRecord.get(genderHeader).contains(gender)) {
+            if (currentRecord.get(nameHeader).equals(name) && currentRecord.get(genderHeader).contains(gender)) {
                 // Check the passed in gener, return appropriate rank
                 if (gender.equals("M")) {
                     return rankMale;
@@ -130,7 +130,8 @@ public class BabyNames {
         String yearBorn = String.valueOf(year);
 
         // Load in the file
-        FileResource fr = new FileResource(currentFilePath + "yob" + yearBorn + "short.csv");
+        FileResource fr = new FileResource();
+        // FileResource fr = new FileResource(currentFilePath + "yob" + yearBorn + "short.csv");
 
         // Loop through the current file
         for (CSVRecord currentRecord : fr.getCSVParser(false)) {
@@ -192,12 +193,11 @@ public class BabyNames {
 
     // Use range of files to return the year with the highest rank for given name and gender
     public int yearOfHighestRank(String name, String gender) {
-        int rankMale = 0;
-        int rankFemale = 0;
         int year = -1;
+        int bankYear = 2147483647;
         int currentYear = 0;
-        int rank = 2147483647;
-        int currentrank = 0;
+        int bankRank = 2147483647;
+        int currentRank = 0;
 
         // Open a folder to select multiple .csv files with weather data
         DirectoryResource dr = new DirectoryResource();
@@ -211,21 +211,29 @@ public class BabyNames {
             // Get the current year from the loaded file
             currentYear = Integer.parseInt(f.getName().replaceAll("[^0-9]", ""));
 
-            // Search the current file for the name and gender and return its rank
-            currentrank = getRank(currentYear, name, gender, fr);
-            if (DEBUG) { System.out.println("Rank for " + name + " is " + currentrank + " in " + currentYear); }
+            // Get the rank of the passed in name
+            currentRank = getRank(currentYear, name, gender, fr);
+            if (DEBUG) { System.out.println("Rank for " + name + " is " + currentRank + " in " + currentYear); }
 
-            // If the rank was found
-            if (currentrank != -1) {
-                // If the captured rank is less than the current rank, replace it
-                if (currentrank < rank) {
-                    rank = currentrank;
-                    // also update year with the year that the lowest rank was determined
-                    year = currentYear;
+            // Next iteration if rank wasn't found
+            if (currentRank == -1) { continue; }
+
+            // If currentRank is less than the bank rank, replace it
+            if (currentRank < bankRank) {
+                bankRank = currentRank;
+                bankYear = currentYear;
+            }
+
+            // If it enounters a new rank that is the same, take the lower year
+            if ((currentRank == bankRank)) {
+                if (currentYear < bankYear) {
+                    bankYear = currentYear;
                 }
             }
         }
-        return year;
+
+        if (DEBUG) { System.out.println("Highest rank for " + name + " is " + bankRank + " in " + bankYear); }
+        return bankYear;
     }
 
     // Use range of files to return the average rank of the name and gender
@@ -317,28 +325,28 @@ public class BabyNames {
     }
 
     public void testGetRank() {
-        System.out.println("Rank: " + getRank(2012, "Olivia", "F"));
+        System.out.println("Rank: " + getRank(1971, "Frank", "M"));
     }
 
     public void testGetName() {
-        System.out.println("Name: " + getName(2012, 1, "F"));
+        System.out.println("Name: " + getName(1980, 350, "F"));
     }
     
     public void testWhatIsNameInYear() {
-        whatIsNameInYear("Olivia", 2012, 2013,"F");
+        whatIsNameInYear("Owen", 1974, 2014,"M");
     }
 
     public void testYearOfHighestRank() {
-        int year = yearOfHighestRank("Olivia", "F");
-        System.out.println("Olivia is ranked highest in year " + year);
+        int year = yearOfHighestRank("Mich", "M");
+        System.out.println("Mich is ranked highest in year " + year);
     }
     
     public void testGetAverageRank() {
-        System.out.println("Average rank is " + getAverageRank("Olivia", "F"));
+        System.out.println("Average rank is " + getAverageRank("Robert", "M"));
     }
     
     public void testGetTotalBirthsRankedHigher() {
-        System.out.println("Total Births ranked higher is " + getTotalBirthsRankedHigher(2012, "Olivia", "F"));
+        System.out.println("Total Births ranked higher is " + getTotalBirthsRankedHigher(1990, "Drew", "M"));
     }
 
 }
