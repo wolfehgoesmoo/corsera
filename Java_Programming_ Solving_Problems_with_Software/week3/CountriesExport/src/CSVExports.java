@@ -86,12 +86,40 @@ public class CSVExports {
         return numCountries;
     }
     
+    // Prints the names of countries and their Value amount for all countries whose Value (dollars)
+    // string is longer than the amount string.
+    public void bigExporters(CSVParser parser, String amount) {
+        String currentRecord = null;
+
+        // Loop through each record
+        for (CSVRecord record : parser) {
+            currentRecord = record.get("Country") + " " + 
+                            record.get("Value (dollars)");
+
+            // If more value is more than what's passed in amount wise
+            if (strAmountToLong(record.get("Value (dollars)")) > strAmountToLong(amount)) {
+                System.out.println(currentRecord);
+            }
+        }
+    }
+
     // Testing methods
     public void tester() {
         FileResource fr = new FileResource();
         CSVParser parser = fr.getCSVParser();
         // System.out.println(countryInfo(parser, "Germany"));
         // listExportersTwoProducts(parser, "gold", "diamonds");
-        System.out.println(numberOfExporters(parser, "gold"));
+        // System.out.println(numberOfExporters(parser, "gold"));
+        bigExporters(parser, "$999,999,999");
+    }
+
+    // Helper method
+    public long strAmountToLong(String amount) {
+        String moneyAsString = null;
+
+        // Convert the amount of money to a long
+        moneyAsString = amount.replace("$","");
+        moneyAsString = moneyAsString.replace(",","");
+        return Long.parseLong(moneyAsString);
     }
 }
